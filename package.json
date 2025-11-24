@@ -7,6 +7,7 @@
 		"cf-typegen": "wrangler types --env-interface CloudflareBindings"
 	},
 	"dependencies": {
+		"fast-xml-parser": "^5.3.2",
 		"hono": "^4.10.6",
 		"valibot": "^1.1.0"
 	},
