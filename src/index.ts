@@ -2,18 +2,69 @@ import { Hono } from "hono";
 import * as v from "valibot";
 
 function esitmateQuery(q: string): {
-  platform: "Niconico" | "YouTube";
+  platform: "Niconico" | "YouTube" | "Bilibili" | "SoundCloud";
   id: string;
 } | null {
-  const niconicoUrl = q.match(
-    /https:\/\/www.nicovideo.jp\/watch\/((sm|nm)\d+)/
-  );
-  if (niconicoUrl) return { platform: "Niconico", id: niconicoUrl[1] };
+  const url = URL.parse(q);
+  if (!url) {
+    if (q.match(/^sm\d+$/)) {
+      // Nicovideo
+      return { platform: "Niconico", id: q };
+    } else if (q.match(/^[\w-]{11}$/)) {
+      // Youtube
+      return { platform: "YouTube", id: q };
+    } else if (q.match(/^BV[a-zA-Z0-9]{10}$/)) {
+      // Bilibili
+      return { platform: "Bilibili", id: q };
+    }
+    return null;
+  }
 
-  const niconicoId = q.match(/^(sm|nm)\d+$/);
-  if (niconicoId) return { platform: "Niconico", id: niconicoId[0] };
-
-  return null;
+  switch (url.hostname) {
+    case "www.nicovideo.jp":
+    case "nicovideo.jp":
+      return {
+        platform: "Niconico",
+        id: url.pathname.split("/watch/")[1] || "",
+      };
+    case "www.youtube.com":
+    case "youtube.com":
+      if (url.pathname === "/watch") {
+        const v = url.searchParams.get("v");
+        if (v)
+          return {
+            platform: "YouTube",
+            id: v,
+          };
+      }
+      return null;
+    case "youtu.be":
+      return {
+        platform: "YouTube",
+        id: url.pathname.slice(1),
+      };
+    case "www.bilibili.com":
+    case "bilibili.com":
+      if (url.pathname.startsWith("/video/")) {
+        return {
+          platform: "Bilibili",
+          id: url.pathname.split("/video/")[1] || "",
+        };
+      }
+      return null;
+    /* TODO: extract soundcloud id,
+    case "soundcloud.com":
+      if (url.pathname.split("/").length >= 3) {
+        return {
+          platform: "SoundCloud",
+          id: url.pathname.slice(1),
+        };
+      }
+      return null;
+    */
+    default:
+      return null;
+  }
 }
 
 async function fallbackNicovideo(sourceId: string) {
