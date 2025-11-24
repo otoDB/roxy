@@ -1,4 +1,7 @@
-# proxy
+# Roxy
+
+様々な動画サイトから透過的に音MADのタイトルやサムネイルをベストエフォートで取得するプロキシです．
+otoDBに登録されている場合はそちらのデータを参照し，まだ登録されていない場合は各動画サイトから可能な限りタイトルなどを取得します．
 
 ## Setup
 
@@ -37,3 +40,11 @@ http localhost:3000 q=="https://www.bilibili.com/video/BV19M4y1h7wM"
 # Soundcloud (Unsupported)
 # http localhost:3000 q=="https://soundcloud.com/hxudmdc1lxrs/worldwidepunyapunya"
 ```
+
+## License
+
+[MIT License](./LICENSE)
+
+## Acknowledgement
+
+[sm42246476](https://www.nicovideo.jp/watch/sm42246476)
