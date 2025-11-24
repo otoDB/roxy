@@ -174,13 +174,14 @@ app.get("/xml", async (c) => {
 
 				return c.text(
 					xmlBuilder.build({
-						query: parsedQuery,
 						data: {
+							query: parsedQuery,
 							title: fallback.title,
 							thumbnail: fallback.thumbnail,
 						},
 					}),
-					200
+					200,
+					{ "Content-Type": "application/xml" }
 				);
 			}
 			default:
@@ -193,8 +194,8 @@ app.get("/xml", async (c) => {
 
 	return c.text(
 		xmlBuilder.build({
-			query: parsedQuery,
 			data: {
+				query: parsedQuery,
 				title: data.title,
 				thumbnail: data.thumbnail,
 				otodb: {
@@ -202,7 +203,8 @@ app.get("/xml", async (c) => {
 				},
 			},
 		}),
-		200
+		200,
+		{ "Content-Type": "application/xml" }
 	);
 });
 
