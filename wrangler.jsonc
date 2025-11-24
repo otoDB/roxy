@@ -1,0 +1,8 @@
+{
+	"name": "otodb-roxy",
+	"main": "src/index.ts",
+	"compatibility_date": "2025-11-24",
+	"observability": {
+		"enabled": true
+	}
+}
