@@ -155,6 +155,21 @@ async function fetchOtodbData(otodbId: number) {
 	return resWork.output;
 }
 
+function buildUrl(q: Exclude<ReturnType<typeof esitmateQuery>, null>) {
+	switch (q.platform) {
+		case "Niconico":
+			return new URL(`watch/${q.id}`, `https://www.nicovideo.jp`).toString();
+		case "YouTube":
+			const url = new URL("https://www.youtube.com/watch");
+			url.searchParams.set("v", q.id);
+			return url.toString();
+		case "Bilibili":
+			return new URL(`video/${q.id}`, `https://www.bilibili.com`).toString();
+		case "SoundCloud":
+			return new URL(q.id, `https://soundcloud.com`).toString();
+	}
+}
+
 const app = new Hono();
 const xmlBuilder = new XMLBuilder({});
 
@@ -176,6 +191,7 @@ app.get("/xml", async (c) => {
 					xmlBuilder.build({
 						data: {
 							query: parsedQuery,
+							url: buildUrl(parsedQuery),
 							title: fallback.title,
 							thumbnail: fallback.thumbnail,
 						},
@@ -196,6 +212,7 @@ app.get("/xml", async (c) => {
 		xmlBuilder.build({
 			data: {
 				query: parsedQuery,
+				url: buildUrl(parsedQuery),
 				title: data.title,
 				thumbnail: data.thumbnail,
 				otodb: {
