@@ -1,13 +1,16 @@
 {
-	"name": "bck",
+	"name": "roxy",
+	"type": "module",
 	"scripts": {
-		"dev": "bun run --hot src/index.ts"
+		"dev": "wrangler dev",
+		"deploy": "wrangler deploy --minify",
+		"cf-typegen": "wrangler types --env-interface CloudflareBindings"
 	},
 	"dependencies": {
 		"hono": "^4.10.6",
 		"valibot": "^1.1.0"
 	},
 	"devDependencies": {
-		"@types/bun": "latest"
+		"wrangler": "^4.50.0"
 	}
 }
