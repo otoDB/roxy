@@ -1,6 +1,10 @@
 import { Hono } from "hono";
 import * as v from "valibot";
-import { XMLBuilder } from "fast-xml-parser";
+import { XMLBuilder, XMLParser } from "fast-xml-parser";
+
+const app = new Hono();
+const xmlBuilder = new XMLBuilder({});
+const xmlParser = new XMLParser({});
 
 function esitmateQuery(q: string): {
 	platform: "Niconico" | "YouTube" | "Bilibili" | "SoundCloud";
@@ -73,38 +77,30 @@ async function fallbackNicovideo(sourceId: string): Promise<{
 	thumbnail: string;
 } | null> {
 	const url = new URL(
-		`/api/watch/v3_guest/${sourceId}`,
-		"https://www.nicovideo.jp"
+		"https://snapshot.search.nicovideo.jp/api/v2/snapshot/video/contents/search"
 	);
-	url.searchParams.set("_frontendId", "6");
-	url.searchParams.set("_frontendVersion", "0");
-	url.searchParams.set("skips", "harmful");
-	url.searchParams.set(
-		"actionTrackId",
-		`${Math.random().toString(36).substring(2)}_${Date.now()}`
-	);
-
-	const result = await fetch(url.toString(), {
-		headers: {
-			"user-agent": "Mozilla/5.0", // TODO: fix
-		},
-	})
+	url.searchParams.set("q", "");
+	url.searchParams.set("targets", "title");
+	url.searchParams.set("fields", "contentId,title,thumbnailUrl");
+	url.searchParams.set("filters[contentId][0]", sourceId);
+	url.searchParams.set("_sort", "-viewCounter");
+	url.searchParams.set("_limit", "1");
+	const result = await fetch(url.toString())
 		.then((res) => res.json())
 		.then((data) =>
 			v.safeParse(
 				v.object({
 					meta: v.object({
-						status: v.number(),
+						status: v.literal(200),
+						totalCount: v.literal(1),
 					}),
-					data: v.object({
-						video: v.object({
-							id: v.string(),
+					data: v.array(
+						v.object({
+							contentId: v.literal(sourceId),
 							title: v.string(),
-							thumbnail: v.object({
-								ogp: v.string(),
-							}),
-						}),
-					}),
+							thumbnailUrl: v.string(),
+						})
+					),
 				}),
 				data
 			)
@@ -112,8 +108,8 @@ async function fallbackNicovideo(sourceId: string): Promise<{
 	if (!result.success) return null;
 	else
 		return {
-			title: result.output.data.video.title,
-			thumbnail: result.output.data.video.thumbnail.ogp,
+			title: result.output.data[0].title,
+			thumbnail: result.output.data[0].thumbnailUrl,
 		};
 }
 
@@ -169,9 +165,6 @@ function buildUrl(q: Exclude<ReturnType<typeof esitmateQuery>, null>) {
 			return new URL(q.id, `https://soundcloud.com`).toString();
 	}
 }
-
-const app = new Hono();
-const xmlBuilder = new XMLBuilder({});
 
 app.get("/xml", async (c) => {
 	const rawQuery = c.req.query("q");
