@@ -57,16 +57,14 @@ function esitmateQuery(q: string): {
 				};
 			}
 			return null;
-		/* TODO: extract soundcloud id,
-    case "soundcloud.com":
-      if (url.pathname.split("/").length >= 3) {
-        return {
-          platform: "SoundCloud",
-          id: url.pathname.slice(1),
-        };
-      }
-      return null;
-    */
+		case "soundcloud.com":
+			if (url.pathname.split("/").length == 3) {
+				return {
+					platform: "SoundCloud",
+					id: url.pathname.slice(1),
+				};
+			}
+			return null;
 		default:
 			return null;
 	}
