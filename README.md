@@ -46,6 +46,12 @@ Googleスプレッドシートの利用を特に想定しているのでXMLの�
 =IF(A2<>"", IMAGE(IMPORTXML(CONCATENATE("https://roxy.otodb.net/xml?q=", A2),"/data/thumbnail")), "")
 ```
 
+次の関数で識別子が取得できます．重複チェックなどに利用出来ます．
+
+```
+=IF(A2<>"", IMAGE(IMPORTXML(CONCATENATE("https://roxy.otodb.net/xml?q=", A2),"/data/identifier")), "")
+```
+
 集計用の機能に関しては["nerdtronics2の振り返り③ (選曲管理/音MAD-mix監修) #ナートロ2"](https://owatax00.hatenablog.com/entry/2022/12/16/220025) のスプレッドシートなどを参考にすると良いかもしれません．
 
 ## Setup
