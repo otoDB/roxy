@@ -1,10 +1,9 @@
+import { XMLBuilder } from "fast-xml-parser";
 import { Hono } from "hono";
 import * as v from "valibot";
-import { XMLBuilder, XMLParser } from "fast-xml-parser";
 
 const app = new Hono();
 const xmlBuilder = new XMLBuilder({});
-const xmlParser = new XMLParser({});
 
 function esitmateQuery(q: string): {
 	platform: "Niconico" | "YouTube" | "Bilibili" | "SoundCloud";
@@ -153,16 +152,19 @@ function buildUrl(q: Exclude<ReturnType<typeof esitmateQuery>, null>) {
 	switch (q.platform) {
 		case "Niconico":
 			return new URL(`watch/${q.id}`, `https://www.nicovideo.jp`).toString();
-		case "YouTube":
+		case "YouTube": {
 			const url = new URL("https://www.youtube.com/watch");
 			url.searchParams.set("v", q.id);
 			return url.toString();
+		}
 		case "Bilibili":
 			return new URL(`video/${q.id}`, `https://www.bilibili.com`).toString();
 		case "SoundCloud":
 			return new URL(q.id, `https://soundcloud.com`).toString();
 	}
 }
+
+app.get("/", (c) => c.redirect("https://github.com/otoDB/roxy"));
 
 app.get("/xml", async (c) => {
 	const rawQuery = c.req.query("q");
