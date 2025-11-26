@@ -1,7 +1,23 @@
 # Roxy
 
 ```shell
-http https://otodb-roxy.me-411.workers.dev/xml q=="sm2057168" | xq -x "data/title"
+# Nicovideo
+http https://roxy.otodb.net/xml q=="sm44769600" | xq -x "data/title"
+
+http https://roxy.otodb.net/xml q=="https://www.nicovideo.jp/watch/sm44769600" | xq -x "data/thumbnail"
+
+# Youtube
+http https://roxy.otodb.net/xml q=="w6Tjn_M5rTc" | xq -x "data/title"
+
+http https://roxy.otodb.net/xml q=="https://www.youtube.com/watch?v=w6Tjn_M5rTc" | xq -x "data/title"
+
+# Bilibili
+http https://roxy.otodb.net/xml q=="BV19M4y1h7wM" | xq -x "data/title"
+
+http https://roxy.otodb.net/xml q=="https://www.bilibili.com/video/BV19M4y1h7wM" | xq -x "data/title"
+
+# SoundCloud
+http https://roxy.otodb.net/xml q=="https://soundcloud.com/hxudmdc1lxrs/worldwidepunyapunya" | xq -x "data/title"
 ```
 
 様々な動画サイトから透過的に音MADのタイトルやサムネイルをベストエフォートで取得するプロキシです．
@@ -41,8 +57,8 @@ http localhost:8787/xml q=="BV19M4y1h7wM"
 
 http localhost:8787/xml q=="https://www.bilibili.com/video/BV19M4y1h7wM"
 
-# Soundcloud (Unsupported)
-# http localhost:8787 q=="https://soundcloud.com/hxudmdc1lxrs/worldwidepunyapunya"
+# Soundcloud
+http localhost:8787/xml q=="https://soundcloud.com/hxudmdc1lxrs/worldwidepunyapunya"
 ```
 
 ## License
