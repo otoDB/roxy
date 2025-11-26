@@ -187,6 +187,7 @@ app.get("/xml", async (c) => {
 							url: buildUrl(parsedQuery),
 							title: fallback.title,
 							thumbnail: fallback.thumbnail,
+							identifier: `niconico:${parsedQuery.id}`,
 						},
 					}),
 					200,
@@ -211,6 +212,7 @@ app.get("/xml", async (c) => {
 				otodb: {
 					id: data.id,
 				},
+				identifier: `otodb:${data.id}`,
 			},
 		}),
 		200,
