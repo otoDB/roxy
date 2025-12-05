@@ -54,6 +54,10 @@ Googleスプレッドシートの利用を特に想定しているのでXMLの�
 
 集計用の機能に関しては["nerdtronics2の振り返り③ (選曲管理/音MAD-mix監修) #ナートロ2"](https://owatax00.hatenablog.com/entry/2022/12/16/220025) のスプレッドシートなどを参考にすると良いかもしれません．
 
+## Notes
+
+- [音MADのタイトルとサムネイルを透過的に取得する: roxy.otodb.net について](./docs/notes_20251206.md), in Japanese, by SnO2WMaN.
+
 ## Setup
 
 To install dependencies:
